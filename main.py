@@ -41,15 +41,18 @@ def determine_total_costs(
 def talent_material_calculator():
     materials = [
         "Mora",
-        "Uncommon books",
-        "Rare books",
-        "Epic books",
+        "Talent books(uncommon)",
+        "Talent books (rare)",
+        "Talent books (epic)",
+        "Mob drops(common)",
+        "Mob drops(uncommon)",
+        "Mob drops(rare)",
         "Boss material",
         "Crowns",
     ]
-    quantities = [0, 0, 0, 0, 0, 0]
+    quantities = [0, 0, 0, 0, 0, 0, 0, 0, 0]
     cumulative_material_dictionary = dict(zip(materials, quantities))
-    initial_dataframe = pandas.read_csv("matcost.csv")
+    initial_dataframe = pandas.read_csv("talent_material_cost.csv")
 
     print(fore.GREEN_1 + "My character has current talent levels:")
     aa_initial = int(input(fore.LIGHT_YELLOW + "Auto-attack talent: "))
@@ -84,7 +87,7 @@ def talent_material_calculator():
             )
 
 
-def levelup_cost_calculator():
+def mora_for_exp_calculator():
     print(fore.GREEN_1 + "I have the following EXP book quantities: ")
     uncommon_exp_books = int(input(fore.LIGHT_GREEN + "Uncommon books: "))
     rare_exp_books = int(input(fore.LIGHT_BLUE + "Rare books: "))
@@ -121,7 +124,7 @@ def find_total_cost_of_levels(current_level, required_level, initial_dataframe):
 
 
 def level_resource_calculator():
-    initial_dataframe = pandas.read_csv("ascendreq.csv")
+    initial_dataframe = pandas.read_csv("character_levelup_ascend_cost.csv")
     print(fore.GREEN_1 + "My character is currently at: ")
     print(fore.LIGHT_YELLOW + "1> Level 1")
     print(fore.LIGHT_YELLOW + "2> Level 20")
@@ -155,6 +158,22 @@ def level_resource_calculator():
         find_total_cost_of_levels(current_level, required_level, initial_dataframe)
 
 
+def exp_book_aggregator():
+    print(fore.GREEN_1 + "I have the following EXP book quantities: ")
+    uncommon_exp_books = int(input(fore.LIGHT_GREEN + "Uncommon books: "))
+    rare_exp_books = int(input(fore.LIGHT_BLUE + "Rare books: "))
+    epic_exp_books = int(input(fore.MAGENTA + "Epic books: "))
+    epic_book_aggregate = epic_exp_books + rare_exp_books / 4 + uncommon_exp_books / 20
+    print(
+        fore.LIGHT_MAGENTA
+        + "\nThis equates to: "
+        + fore.GREEN
+        + str(epic_book_aggregate)
+        + " hero's wit"
+        + fore.WHITE
+    )
+
+
 def main():
     option = int(
         input(
@@ -165,16 +184,18 @@ def main():
             2. Figure out how much mora you need for some EXP quantity.
             3. Figure out character level+ascension resource requirements.
             4. Convert uncommon, rare and epic EXP books' EXP values to values relative to epic EXP books. 
-            4. Exit.\n"""
+            5. Exit.\n"""
             + style.RESET
         )
     )
     if option == 1:
         talent_material_calculator()
     if option == 2:
-        levelup_cost_calculator()
+        mora_for_exp_calculator()
     if option == 3:
         level_resource_calculator()
+    if option == 4:
+        exp_book_aggregator()
 
 
 if __name__ == "__main__":
