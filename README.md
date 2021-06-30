@@ -16,4 +16,12 @@ You can also choose to use `colorless_main.py` in case your command line doesn't
 
 There's also an EXE for `colorless_main.py`. You can run it, provided the EXE and `character_levelup_ascend.json` and `talent_material_cost.json` are in the same folder.Just download those three files, keep them in the same folder, and enjoy!
 
+If you wish to generate the exe yourself, do this:
+
+1. Clone this repo, set up a venv, and activate it.
+2. Install pyinstaller `pip install pyinstaller`.
+3. Next, execute this command:`pyinstaller --onefile --hidden-import=pkg_resources.py2_warn colorless_main.py`. The `--hidden-import` is necessary at least on the machine I'm testing on, because of this error that happens if you run `pyinstaller --onefile colorless_main.py`:
+   > [29824] Failed to execute script pyi_rth_win32api
+4. Et voila!
+
 Have fun!
