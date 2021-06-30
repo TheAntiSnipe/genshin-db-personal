@@ -10,6 +10,10 @@ Currently, we have the following features:
 
 This is my personal Swiss-army knife of tools that I use when I boost characters from a certain level to another.
 
-Only dependencies are `pandas` and `colorama`.
+Only dependency is `colorama`.
+
+You can also choose to use `colorless_main.py` in case your command line doesn't support colored output.
+
+There's also an EXE for `colorless_main.py`. You can run it, provided the EXE and `character_levelup_ascend.json` and `talent_material_cost.json` are in the same folder.Just download those three files, keep them in the same folder, and enjoy!
 
 Have fun!
