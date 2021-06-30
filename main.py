@@ -1,202 +1,233 @@
 import pandas
-from colored import fore, style
+from colorama import Fore, init
+
+init()
 
 
-def talent_determine(
-    initial_level, final_level, initial_dataframe, cumulative_material_dictionary
-):
-    # Always summate from "initialLevel-1" to "finalLevel-1"
-    final_dataframe = initial_dataframe.iloc[initial_level - 1 : final_level - 1].sum()
-    material_dictionary = final_dataframe.to_dict()
-    for key, value in material_dictionary.items():
-        cumulative_material_dictionary[key] += value
+class TalentCostCalculator:
+    def __init__(self):
+        self.initial_dataframe = pandas.read_csv("talent_material_cost.csv")
+        materials = [
+            "Mora",
+            "Talent books(uncommon)",
+            "Talent books (rare)",
+            "Talent books (epic)",
+            "Mob drops(common)",
+            "Mob drops(uncommon)",
+            "Mob drops(rare)",
+            "Boss material",
+            "Crowns",
+        ]
+        quantities = [0, 0, 0, 0, 0, 0, 0, 0, 0]
+        self.cumulative_material_dictionary = dict(zip(materials, quantities))
 
+    # * Three methods:
+    # *    1. run_talent_material_calculator
+    #        Handles UI display and sends initial and final talent values to
+    #        determine_total_costs_and_display.
+    # *    2. determine_total_costs_and_display
+    #        Handles method calls to aggregate_cumulative_cost and displays
+    #        output UI.
+    # *    3. aggregate_cumulative_cost
+    #        Handles dataframe aggregation and summation with
+    #        cumulative_material_dictionary.
 
-def determine_total_costs(
-    initial_talent_values,
-    final_talent_values,
-    initial_dataframe,
-    cumulative_material_dictionary,
-):
-    talent_determine(
-        initial_talent_values[0],
-        final_talent_values[0],
-        initial_dataframe,
-        cumulative_material_dictionary,
-    )
-    talent_determine(
-        initial_talent_values[1],
-        final_talent_values[1],
-        initial_dataframe,
-        cumulative_material_dictionary,
-    )
-    talent_determine(
-        initial_talent_values[2],
-        final_talent_values[2],
-        initial_dataframe,
-        cumulative_material_dictionary,
-    )
+    def aggregate_cumulative_cost(self, initial_level, final_level):
+        # Always summate from "initialLevel-1" to "finalLevel-1"th index in
+        # the dataframe.
 
+        aggregated_dataframe = self.initial_dataframe.iloc[
+            initial_level - 1 : final_level - 1
+        ].sum()
+        material_dictionary = aggregated_dataframe.to_dict()
+        for key, value in material_dictionary.items():
+            # Add resources to the cumulative dictionary
+            self.cumulative_material_dictionary[key] += value
 
-def talent_material_calculator():
-    materials = [
-        "Mora",
-        "Talent books(uncommon)",
-        "Talent books (rare)",
-        "Talent books (epic)",
-        "Mob drops(common)",
-        "Mob drops(uncommon)",
-        "Mob drops(rare)",
-        "Boss material",
-        "Crowns",
-    ]
-    quantities = [0, 0, 0, 0, 0, 0, 0, 0, 0]
-    cumulative_material_dictionary = dict(zip(materials, quantities))
-    initial_dataframe = pandas.read_csv("talent_material_cost.csv")
-
-    print(fore.GREEN_1 + "My character has current talent levels:")
-    aa_initial = int(input(fore.LIGHT_YELLOW + "Auto-attack talent: "))
-    e_initial = int(input(fore.LIGHT_YELLOW + "Elemental skill talent: "))
-    q_initial = int(input(fore.LIGHT_YELLOW + "Elemental burst talent: "))
-    initial_talent_values = [aa_initial, e_initial, q_initial]
-
-    print(fore.GREEN_1 + "\nI need talent levels:")
-    aa_final = int(input(fore.LIGHT_YELLOW + "Auto-attack talent: "))
-    e_final = int(input(fore.LIGHT_YELLOW + "Elemental skill talent: "))
-    q_final = int(input(fore.LIGHT_YELLOW + "Elemental burst talent: "))
-    final_talent_values = [aa_final, e_final, q_final]
-    print(fore.GREEN_1 + "\nThus, I need:")
-
-    determine_total_costs(
+    def determine_total_costs_and_display(
+        self,
         initial_talent_values,
         final_talent_values,
-        initial_dataframe,
-        cumulative_material_dictionary,
-    )
+    ):
 
-    for key, value in cumulative_material_dictionary.items():
-        if value != 0:
+        for index in range(3):
+            self.aggregate_cumulative_cost(
+                initial_talent_values[index],
+                final_talent_values[index],
+            )
+        for key, value in self.cumulative_material_dictionary.items():
+            if value != 0:
+                print(
+                    Fore.MAGENTA
+                    + "Total "
+                    + key
+                    + " needed: "
+                    + Fore.GREEN
+                    + str(int(value))
+                    + Fore.WHITE
+                )
+
+    def run_talent_material_calculator(self):
+        print(Fore.GREEN + "\nMy character has current talent levels:")
+
+        aa_initial = int(input(Fore.LIGHTYELLOW_EX + "Auto-attack talent: "))
+        e_initial = int(input(Fore.LIGHTYELLOW_EX + "Elemental skill talent: "))
+        q_initial = int(input(Fore.LIGHTYELLOW_EX + "Elemental burst talent: "))
+        initial_talent_values = [aa_initial, e_initial, q_initial]
+
+        print(Fore.GREEN + "\nI need talent levels:")
+        aa_final = int(input(Fore.LIGHTYELLOW_EX + "Auto-attack talent: "))
+        e_final = int(input(Fore.LIGHTYELLOW_EX + "Elemental skill talent: "))
+        q_final = int(input(Fore.LIGHTYELLOW_EX + "Elemental burst talent: "))
+        final_talent_values = [aa_final, e_final, q_final]
+        print(Fore.LIGHTCYAN_EX + "\nThus, I need:")
+
+        self.determine_total_costs_and_display(
+            initial_talent_values,
+            final_talent_values,
+        )
+
+
+class BasicCalculationFunctions:
+    def mora_for_exp_calculator(self):
+        print(Fore.GREEN + "\nI have the following EXP book quantities: ")
+        uncommon_exp_books = int(input(Fore.GREEN + "Uncommon books: "))
+        rare_exp_books = int(input(Fore.CYAN + "Rare books: "))
+        epic_exp_books = int(input(Fore.MAGENTA + "Epic books: "))
+        total_mora_required = (
+            200 * uncommon_exp_books + 1000 * rare_exp_books + 4000 * epic_exp_books
+        )
+        print(
+            Fore.LIGHTYELLOW_EX
+            + "\nThus, I need "
+            + str(total_mora_required)
+            + " mora"
+            + Fore.WHITE
+        )
+
+    def exp_book_aggregator(self):
+        print(Fore.GREEN + "\nI have the following EXP book quantities: ")
+        uncommon_exp_books = int(input(Fore.BLUE + "Uncommon books: "))
+        rare_exp_books = int(input(Fore.CYAN + "Rare books: "))
+        epic_exp_books = int(input(Fore.MAGENTA + "Epic books: "))
+        epic_book_aggregate = (
+            epic_exp_books + rare_exp_books / 4 + uncommon_exp_books / 20
+        )
+        print(
+            Fore.MAGENTA
+            + "\nThis equates to: "
+            + Fore.GREEN
+            + str(epic_book_aggregate)
+            + " hero's wit"
+            + Fore.WHITE
+        )
+
+
+class LevelingCostCalculator:
+    def __init__(self):
+        self.initial_dataframe = pandas.read_csv("character_levelup_ascend_cost.csv")
+
+    def find_total_cost_of_levels(self, current_level, required_level):
+        # Index start corresponds to (current_level-1)th value. Index end corresponds to this too.
+
+        final_dataframe = self.initial_dataframe.iloc[
+            current_level - 1 : required_level
+        ].sum()
+        dataframe_dict = final_dataframe.to_dict()
+        for key, value in dataframe_dict.items():
+            if value != 0:
+                if key != "EXP needed":
+                    print(Fore.MAGENTA + key + ":" + Fore.GREEN + str(value))
+                else:
+                    final_exp_required = round(value / 20000, 2)
+                    print(
+                        Fore.MAGENTA
+                        + "EXP books needed in terms of epic EXP books: "
+                        + Fore.GREEN
+                        + str(final_exp_required)
+                        + Fore.WHITE
+                    )
+
+    def level_resource_calculator(self):
+        print(Fore.GREEN + "\nMy character is currently at: ")
+        print(Fore.LIGHTYELLOW_EX + "1> Level 1")
+        print(Fore.LIGHTYELLOW_EX + "2> Level 20")
+        print(Fore.LIGHTYELLOW_EX + "3> Level 40")
+        print(Fore.LIGHTYELLOW_EX + "4> Level 50")
+        print(Fore.LIGHTYELLOW_EX + "5> Level 60")
+        print(Fore.LIGHTYELLOW_EX + "6> Level 70")
+        print(Fore.LIGHTYELLOW_EX + "7> Level 80")
+        print(
+            Fore.LIGHTYELLOW_EX
+            + """\n(We are assuming your character hasn't been ascended at that level. 
+If you select 20, your character should be 20/20, not 20/40.)\n"""
+        )
+        current_level = int(input(Fore.GREEN + "Enter the corresponding number: "))
+
+        print(Fore.GREEN + "I want my character to be: ")
+        print(Fore.LIGHTYELLOW_EX + "1> Level 20")
+        print(Fore.LIGHTYELLOW_EX + "2> Level 40")
+        print(Fore.LIGHTYELLOW_EX + "3> Level 50")
+        print(Fore.LIGHTYELLOW_EX + "4> Level 60")
+        print(Fore.LIGHTYELLOW_EX + "5> Level 70")
+        print(Fore.LIGHTYELLOW_EX + "6> Level 80")
+        print(Fore.LIGHTYELLOW_EX + "7> Level 90")
+        required_level = int(input(Fore.GREEN + "\nEnter the corresponding number: "))
+        if required_level < current_level:
             print(
-                fore.LIGHT_MAGENTA
-                + "Total "
-                + key
-                + " needed: "
-                + fore.GREEN
-                + str(int(value))
-                + fore.WHITE
+                Fore.RED
+                + "Your required level cannot be lower than your current level. Exiting."
+            )
+        else:
+            start_level = [1, 20, 40, 50, 60, 70, 80]
+            end_level = [20, 40, 50, 60, 70, 80, 90]
+            print(
+                Fore.LIGHTCYAN_EX
+                + "\nMaterials required to level a character from "
+                + str(start_level[current_level - 1])
+                + " to "
+                + str(end_level[required_level - 1])
+                + ":\n"
+            )
+            self.find_total_cost_of_levels(current_level, required_level)
+
+
+class MainMenu:
+    def display_option_list(self):
+        option = int(
+            input(
+                Fore.LIGHTBLUE_EX
+                + """\nEnter what you want to do with the database:
+1. Figure out talent level resource requirements.
+2. Figure out how much mora you need for some EXP quantity.
+3. Figure out character level + ascension resource requirements.
+4. Convert uncommon, rare and epic EXP books' EXP values to values relative to epic EXP books. 
+5. Exit.
+
+Enter the corresponding number: """
+            )
+        )
+        calculation_functions = BasicCalculationFunctions()
+        talent_cost_calculator = TalentCostCalculator()
+        leveling_cost_calculator = LevelingCostCalculator()
+        if option == 1:
+            talent_cost_calculator.run_talent_material_calculator()
+        elif option == 2:
+            calculation_functions.mora_for_exp_calculator()
+        elif option == 3:
+            leveling_cost_calculator.level_resource_calculator()
+        elif option == 4:
+            calculation_functions.exp_book_aggregator()
+        elif option == 5:
+            exit(Fore.LIGHTGREEN_EX + "Thank you for using GI-DB!")
+        else:
+            print(
+                "Invalid option, please select an option between 1 and 5. You selected",
+                option,
             )
 
 
-def mora_for_exp_calculator():
-    print(fore.GREEN_1 + "I have the following EXP book quantities: ")
-    uncommon_exp_books = int(input(fore.LIGHT_GREEN + "Uncommon books: "))
-    rare_exp_books = int(input(fore.LIGHT_BLUE + "Rare books: "))
-    epic_exp_books = int(input(fore.MAGENTA + "Epic books: "))
-    total_mora_required = (
-        200 * uncommon_exp_books + 1000 * rare_exp_books + 4000 * epic_exp_books
-    )
-    print(
-        fore.LIGHT_YELLOW
-        + "Thus, I need "
-        + str(total_mora_required)
-        + " mora"
-        + fore.WHITE
-    )
-
-
-def find_total_cost_of_levels(current_level, required_level, initial_dataframe):
-    # Index start corresponds to (current_level-1)th value. Index end corresponds to this too.
-    final_dataframe = initial_dataframe.iloc[current_level - 1 : required_level].sum()
-    dataframe_dict = final_dataframe.to_dict()
-    for key, value in dataframe_dict.items():
-        if value != 0:
-            if key != "EXP needed":
-                print(fore.LIGHT_MAGENTA + key + ":" + fore.GREEN + str(value))
-            else:
-                final_exp_required = round(value / 20000, 2)
-                print(
-                    fore.LIGHT_MAGENTA
-                    + "EXP books needed in terms of epic EXP books: "
-                    + fore.GREEN
-                    + str(final_exp_required)
-                    + fore.WHITE
-                )
-
-
-def level_resource_calculator():
-    initial_dataframe = pandas.read_csv("character_levelup_ascend_cost.csv")
-    print(fore.GREEN_1 + "My character is currently at: ")
-    print(fore.LIGHT_YELLOW + "1> Level 1")
-    print(fore.LIGHT_YELLOW + "2> Level 20")
-    print(fore.LIGHT_YELLOW + "3> Level 40")
-    print(fore.LIGHT_YELLOW + "4> Level 50")
-    print(fore.LIGHT_YELLOW + "5> Level 60")
-    print(fore.LIGHT_YELLOW + "6> Level 70")
-    print(fore.LIGHT_YELLOW + "7> Level 80")
-    print(
-        fore.YELLOW_1
-        + """(We are assuming your character hasn't been ascended at that level. 
-        If you select 20, your character should be 20/20, not 20/40.)"""
-    )
-    current_level = int(input(fore.GREEN + "Enter the corresponding number: "))
-
-    print(fore.GREEN_1 + "I want my character to be: ")
-    print(fore.LIGHT_YELLOW + "1> Level 20")
-    print(fore.LIGHT_YELLOW + "2> Level 40")
-    print(fore.LIGHT_YELLOW + "3> Level 50")
-    print(fore.LIGHT_YELLOW + "4> Level 60")
-    print(fore.LIGHT_YELLOW + "5> Level 70")
-    print(fore.LIGHT_YELLOW + "6> Level 80")
-    print(fore.LIGHT_YELLOW + "7> Level 90")
-    required_level = int(input(fore.GREEN + "Enter the corresponding number: "))
-    if required_level < current_level:
-        print(
-            fore.RED
-            + "Your required level cannot be lower than your current level. Exiting."
-        )
-    else:
-        find_total_cost_of_levels(current_level, required_level, initial_dataframe)
-
-
-def exp_book_aggregator():
-    print(fore.GREEN_1 + "I have the following EXP book quantities: ")
-    uncommon_exp_books = int(input(fore.LIGHT_GREEN + "Uncommon books: "))
-    rare_exp_books = int(input(fore.LIGHT_BLUE + "Rare books: "))
-    epic_exp_books = int(input(fore.MAGENTA + "Epic books: "))
-    epic_book_aggregate = epic_exp_books + rare_exp_books / 4 + uncommon_exp_books / 20
-    print(
-        fore.LIGHT_MAGENTA
-        + "\nThis equates to: "
-        + fore.GREEN
-        + str(epic_book_aggregate)
-        + " hero's wit"
-        + fore.WHITE
-    )
-
-
-def main():
-    option = int(
-        input(
-            fore.LIGHT_MAGENTA
-            + style.BOLD
-            + """\tEnter what you want to do with the database:
-            1. Figure out talent level resource requirements.
-            2. Figure out how much mora you need for some EXP quantity.
-            3. Figure out character level+ascension resource requirements.
-            4. Convert uncommon, rare and epic EXP books' EXP values to values relative to epic EXP books. 
-            5. Exit.\n"""
-            + style.RESET
-        )
-    )
-    if option == 1:
-        talent_material_calculator()
-    if option == 2:
-        mora_for_exp_calculator()
-    if option == 3:
-        level_resource_calculator()
-    if option == 4:
-        exp_book_aggregator()
-
-
 if __name__ == "__main__":
-    main()
+    newMenu = MainMenu()
+    while True:
+        newMenu.display_option_list()
