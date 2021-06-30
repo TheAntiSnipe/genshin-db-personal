@@ -1,13 +1,15 @@
-import pandas
 from colorama import Fore, init
+import json
 
 init()
 
 
 class TalentCostCalculator:
     def __init__(self):
-        self.initial_dataframe = pandas.read_csv("talent_material_cost.csv")
-        materials = [
+        talent_material_cost_json = open("talent_material_cost.json", "r")
+        self.talent_material_cost_dict = json.load(talent_material_cost_json)
+
+        list_of_material_types = [
             "Mora",
             "Talent books(uncommon)",
             "Talent books (rare)",
@@ -18,9 +20,13 @@ class TalentCostCalculator:
             "Boss material",
             "Crowns",
         ]
-        quantities = [0, 0, 0, 0, 0, 0, 0, 0, 0]
-        self.cumulative_material_dictionary = dict(zip(materials, quantities))
-        # * cumulative_material_dictionary holds the current sum of all resources
+        list_of_material_quantities = [0, 0, 0, 0, 0, 0, 0, 0, 0]
+
+        self.cumulative_material_dict = dict(
+            zip(list_of_material_types, list_of_material_quantities)
+        )
+
+        # * cumulative_material_dict holds the current sum of all resources
         # * needed. Updates in aggregate_cumulative_cost for each talent.
         # * Used in determine_total_costs_and_display after all iterations of
         # * aggregate_cumulative_cost finish.
@@ -34,24 +40,17 @@ class TalentCostCalculator:
     #        output UI.
     # *    3. aggregate_cumulative_cost
     #        Handles dataframe aggregation and summation with
-    #        cumulative_material_dictionary.
+    #        cumulative_material_dict.
 
     def aggregate_cumulative_cost(self, initial_level, final_level):
-        # Always summate from "initialLevel-1" to "finalLevel-1"th index in
-        # the dataframe.
-
-        aggregated_dataframe = self.initial_dataframe.iloc[
-            initial_level - 1 : final_level - 1
-        ].sum()
-        material_dictionary = aggregated_dataframe.to_dict()
-        for key, value in material_dictionary.items():
-            # * Add resources to the cumulative dictionary
-            #   We want to find out the requirements for each talent
-            #   and add them together, then display them.
-            # * cumulative_material_dictionary holds these sum values
-            # * and updates after each iteration of this function.
-
-            self.cumulative_material_dictionary[key] += value
+        for index in range(initial_level - 1, final_level - 1):
+            # * The json data is zero-indexed
+            for key in list(self.cumulative_material_dict.keys()):
+                # Update for the values associated with each key in the
+                # cumulative_material_dict
+                self.cumulative_material_dict[key] += self.talent_material_cost_dict[
+                    key
+                ][str(index)]
 
     def determine_total_costs_and_display(
         self,
@@ -64,7 +63,7 @@ class TalentCostCalculator:
                 initial_talent_values[index],
                 final_talent_values[index],
             )
-        for key, value in self.cumulative_material_dictionary.items():
+        for key, value in self.cumulative_material_dict.items():
             if value != 0:
                 # * If something is not required, don't display it.
                 print(
@@ -149,7 +148,26 @@ class BasicCalculationFunctions:
 
 class LevelingCostCalculator:
     def __init__(self):
-        self.initial_dataframe = pandas.read_csv("character_levelup_ascend_cost.csv")
+        ascend_cost_json = open("character_levelup_ascend_cost.json", "r")
+        self.ascend_cost_dict = json.load(ascend_cost_json)
+
+        list_of_material_types = [
+            "Mora",
+            "Crystal fragment (uncommon)",
+            "Crystal fragment (rare)",
+            "Crystal fragment (epic)",
+            "Crystal fragment (legendary)",
+            "Boss material",
+            "Local speciality",
+            "Mob drops(common)",
+            "Mob drops(uncommon)",
+            "Mob drops(rare)",
+            "EXP needed",
+        ]
+        list_of_material_quantities = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        self.cumulative_material_dict = dict(
+            zip(list_of_material_types, list_of_material_quantities)
+        )
 
     # * Two methods:
     # *     1. level_resource_calculator
@@ -159,13 +177,13 @@ class LevelingCostCalculator:
     #          Aggregates total resources needed and displays output UI.
 
     def find_total_cost_of_levels(self, current_level, required_level):
-        # Index start corresponds to (current_level-1)th value. Index end corresponds to this too.
+        for index in range(current_level, required_level):
+            for key in list(self.cumulative_material_dict.keys()):
+                self.cumulative_material_dict[key] += self.ascend_cost_dict[key][
+                    str(index)
+                ]
 
-        final_dataframe = self.initial_dataframe.iloc[
-            current_level - 1 : required_level
-        ].sum()
-        dataframe_dict = final_dataframe.to_dict()
-        for key, value in dataframe_dict.items():
+        for key, value in self.cumulative_material_dict.items():
             if value != 0:
                 # * We need a separate piece of logic when displaying
                 # * the EXP needed section.

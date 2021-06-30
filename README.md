@@ -10,6 +10,6 @@ Currently, we have the following features:
 
 This is my personal Swiss-army knife of tools that I use when I boost characters from a certain level to another.
 
-Only dependencies are `pandas` and `colored`.
+Only dependencies are `pandas` and `colorama`.
 
 Have fun!
