@@ -20,6 +20,10 @@ class TalentCostCalculator:
         ]
         quantities = [0, 0, 0, 0, 0, 0, 0, 0, 0]
         self.cumulative_material_dictionary = dict(zip(materials, quantities))
+        # * cumulative_material_dictionary holds the current sum of all resources
+        # * needed. Updates in aggregate_cumulative_cost for each talent.
+        # * Used in determine_total_costs_and_display after all iterations of
+        # * aggregate_cumulative_cost finish.
 
     # * Three methods:
     # *    1. run_talent_material_calculator
@@ -41,7 +45,12 @@ class TalentCostCalculator:
         ].sum()
         material_dictionary = aggregated_dataframe.to_dict()
         for key, value in material_dictionary.items():
-            # Add resources to the cumulative dictionary
+            # * Add resources to the cumulative dictionary
+            #   We want to find out the requirements for each talent
+            #   and add them together, then display them.
+            # * cumulative_material_dictionary holds these sum values
+            # * and updates after each iteration of this function.
+
             self.cumulative_material_dictionary[key] += value
 
     def determine_total_costs_and_display(
@@ -57,6 +66,7 @@ class TalentCostCalculator:
             )
         for key, value in self.cumulative_material_dictionary.items():
             if value != 0:
+                # * If something is not required, don't display it.
                 print(
                     Fore.MAGENTA
                     + "Total "
@@ -89,11 +99,25 @@ class TalentCostCalculator:
 
 
 class BasicCalculationFunctions:
+    #  This class covers functions that do simple calculations and don't pull from
+    #  any of the csv files.
+
+    # * Two methods:
+    # *     1. mora_for_exp_calculator
+    #         Handles the second option, gives the number of mora needed
+    #         for a given number of EXP books.
+    # *     2. exp_book_aggregator
+    #         Handles the conversion of various EXP book types to a standardized
+    #         "hero's wit equivalent" format.
+
     def mora_for_exp_calculator(self):
         print(Fore.GREEN + "\nI have the following EXP book quantities: ")
         uncommon_exp_books = int(input(Fore.GREEN + "Uncommon books: "))
         rare_exp_books = int(input(Fore.CYAN + "Rare books: "))
         epic_exp_books = int(input(Fore.MAGENTA + "Epic books: "))
+        # * Cost per uncommon book is 200 mora.
+        # * Cost per rare book is 1000 mora.
+        # * Cost per epic book is 4000 mora.
         total_mora_required = (
             200 * uncommon_exp_books + 1000 * rare_exp_books + 4000 * epic_exp_books
         )
@@ -127,6 +151,13 @@ class LevelingCostCalculator:
     def __init__(self):
         self.initial_dataframe = pandas.read_csv("character_levelup_ascend_cost.csv")
 
+    # * Two methods:
+    # *     1. level_resource_calculator
+    #         Handles UI display and sends the current and required level
+    #         values to find_total_cost_of_levels
+    # *     2. find_total_cost_of_levels
+    #          Aggregates total resources needed and displays output UI.
+
     def find_total_cost_of_levels(self, current_level, required_level):
         # Index start corresponds to (current_level-1)th value. Index end corresponds to this too.
 
@@ -136,9 +167,13 @@ class LevelingCostCalculator:
         dataframe_dict = final_dataframe.to_dict()
         for key, value in dataframe_dict.items():
             if value != 0:
+                # * We need a separate piece of logic when displaying
+                # * the EXP needed section.
                 if key != "EXP needed":
                     print(Fore.MAGENTA + key + ":" + Fore.GREEN + str(value))
                 else:
+                    # * One epic book is 20000 EXP, we round it to
+                    # * double precision.
                     final_exp_required = round(value / 20000, 2)
                     print(
                         Fore.MAGENTA
