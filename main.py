@@ -48,6 +48,7 @@ class TalentCostCalculator:
             for key in list(self.cumulative_material_dict.keys()):
                 # Update for the values associated with each key in the
                 # cumulative_material_dict
+
                 self.cumulative_material_dict[key] += self.talent_material_cost_dict[
                     key
                 ][str(index)]
@@ -177,7 +178,7 @@ class LevelingCostCalculator:
     #          Aggregates total resources needed and displays output UI.
 
     def find_total_cost_of_levels(self, current_level, required_level):
-        for index in range(current_level, required_level):
+        for index in range(current_level-1, required_level):
             for key in list(self.cumulative_material_dict.keys()):
                 self.cumulative_material_dict[key] += self.ascend_cost_dict[key][
                     str(index)
