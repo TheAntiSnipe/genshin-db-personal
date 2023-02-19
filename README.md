@@ -1,6 +1,6 @@
 # genshin-db-personal
 
-Just a WIP of a personal database for Genshin Impact.
+Just a personal database for Genshin Impact.
 Currently, we have the following features:
 
 1. A talent material calculator. Uses `talent_material_cost.json` as an input file and tells you how many materials you need to get a three-set of talents from level x to level y. ![Example](https://media.discordapp.net/attachments/780657122589278239/859620593095933952/exper1.png)
@@ -12,7 +12,8 @@ This is my personal Swiss-army knife of tools that I use when I boost characters
 
 Only dependency is `colorama`.
 
-You can also choose to use `colorless_main.py` in case your command line doesn't support colored output.
+You can also choose to use `colorless_main.py` in case your command line doesn't support colored output. (Linux systems!)
+Also for colorless_main gang, we have a snap registered in the snap store! Here's the link: https://snapcraft.io/genshin-resource-calc
 
 There's also an EXE for `colorless_main.py` that I have now removed since my current PC has Anaconda and the exe would be too big if it tried to add all of those dependancies.
 
