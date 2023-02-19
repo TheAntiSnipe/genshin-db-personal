@@ -1,20 +1,19 @@
-name: resource-calc
+name: genshin-resource-calc
 summary: A resource calculator for the game "Genshin Impact".
 description: |
     Use this resource calculator to figure out material requirements for various characters!
     Character building stats at a glance.
 version: git
 grade: stable
-confinement: devmode
+confinement: strict
 base: core20
 architectures:
   - build-on: [arm64,armhf,amd64]
 apps:
-  resource-calc:
+  genshin-resource-calc:
     command: bin/resource-calc
     plugs: [home,network-bind]
 parts:
-  resource-calc:
+  genshin-resource-calc:
     plugin: python
     source: https://github.com/TheAntiSnipe/genshin-db-personal.git
-    # source: .

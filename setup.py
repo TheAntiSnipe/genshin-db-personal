@@ -13,7 +13,7 @@ setup(
     # install_requires=['future'],
     entry_points = {
         'console_scripts': [
-            'resource-calc=src.colorless_main:main']
+            'genshin-resource-calc=src.colorless_main:main']
             },
     classifiers = ['Operating System :: OS Independent',
             'Programming Language :: Python :: 2.7',
