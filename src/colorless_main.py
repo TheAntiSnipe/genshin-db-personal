@@ -248,6 +248,10 @@ Enter the corresponding number: """
                 option,
             )
 
+def main():
+    newMenu = MainMenu()
+    while True:
+        newMenu.display_option_list()
 
 if __name__ == "__main__":
     newMenu = MainMenu()
