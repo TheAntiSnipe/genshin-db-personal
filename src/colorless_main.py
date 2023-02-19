@@ -1,10 +1,11 @@
 import json
+import os
 
 
 class TalentCostCalculator:
     def __init__(self):
-        talent_material_cost_json = open("talent_material_cost.json", "r")
-        self.talent_material_cost_dict = json.load(talent_material_cost_json)
+        # talent_material_cost_json = open(os.path.join(os.environ["SNAP_DATA"],"talent_material_cost.json"), "r")
+        self.talent_material_cost_dict = {"Mora":{"0":12500,"1":17500,"2":25000,"3":30000,"4":37500,"5":120000,"6":260000,"7":450000,"8":700000},"Talent books(uncommon)":{"0":3,"1":0,"2":0,"3":0,"4":0,"5":0,"6":0,"7":0,"8":0},"Talent books (rare)":{"0":0,"1":2,"2":4,"3":6,"4":9,"5":0,"6":0,"7":0,"8":0},"Talent books (epic)":{"0":0,"1":0,"2":0,"3":0,"4":0,"5":4,"6":6,"7":12,"8":16},"Mob drops(common)":{"0":6,"1":0,"2":0,"3":0,"4":0,"5":0,"6":0,"7":0,"8":0},"Mob drops(uncommon)":{"0":0,"1":3,"2":4,"3":6,"4":9,"5":0,"6":0,"7":0,"8":0},"Mob drops(rare)":{"0":0,"1":0,"2":0,"3":0,"4":0,"5":4,"6":6,"7":9,"8":12},"Boss material":{"0":0,"1":0,"2":0,"3":0,"4":0,"5":1,"6":1,"7":2,"8":2},"Crowns":{"0":0,"1":0,"2":0,"3":0,"4":0,"5":0,"6":0,"7":0,"8":1}}
 
         list_of_material_types = [
             "Mora",
@@ -124,8 +125,108 @@ class BasicCalculationFunctions:
 
 class LevelingCostCalculator:
     def __init__(self):
-        ascend_cost_json = open("character_levelup_ascend_cost.json", "r")
-        self.ascend_cost_dict = json.load(ascend_cost_json)
+        # ascend_cost_json = open(os.path.join(os.environ["SNAP_DATA"],"character_levelup_ascend_cost.json"), "r")
+        self.ascend_cost_dict = {
+    "Mora": {
+        "0": 24200,
+        "1": 135800,
+        "2": 156000,
+        "3": 231000,
+        "4": 319200,
+        "5": 402400,
+        "6": 804800
+    },
+    "Crystal fragment (uncommon)": {
+        "0": 0,
+        "1": 1,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0,
+        "6": 0
+    },
+    "Crystal fragment (rare)": {
+        "0": 0,
+        "1": 0,
+        "2": 3,
+        "3": 6,
+        "4": 0,
+        "5": 0,
+        "6": 0
+    },
+    "Crystal fragment (epic)": {
+        "0": 0,
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 3,
+        "5": 6,
+        "6": 0
+    },
+    "Crystal fragment (legendary)": {
+        "0": 0,
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0,
+        "6": 6
+    },
+    "Boss material": {
+        "0": 0,
+        "1": 0,
+        "2": 2,
+        "3": 4,
+        "4": 8,
+        "5": 12,
+        "6": 20
+    },
+    "Local speciality": {
+        "0": 0,
+        "1": 3,
+        "2": 10,
+        "3": 20,
+        "4": 30,
+        "5": 45,
+        "6": 60
+    },
+    "Mob drops(common)": {
+        "0": 0,
+        "1": 3,
+        "2": 15,
+        "3": 0,
+        "4": 0,
+        "5": 0,
+        "6": 0
+    },
+    "Mob drops(uncommon)": {
+        "0": 0,
+        "1": 0,
+        "2": 0,
+        "3": 12,
+        "4": 18,
+        "5": 0,
+        "6": 0
+    },
+    "Mob drops(rare)": {
+        "0": 0,
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 12,
+        "6": 24
+    },
+    "EXP needed": {
+        "0": 120175,
+        "1": 578325,
+        "2": 579100,
+        "3": 854125,
+        "4": 1195925,
+        "5": 1611875,
+        "6": 3423125
+    }
+}
 
         list_of_material_types = [
             "Mora",

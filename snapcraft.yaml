@@ -16,5 +16,5 @@ apps:
 parts:
   resource-calc:
     plugin: python
-    # source: https://github.com/TheAntiSnipe/genshin-db-personal.git
-    source: .
+    source: https://github.com/TheAntiSnipe/genshin-db-personal.git
+    # source: .
