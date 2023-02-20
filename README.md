@@ -21,7 +21,12 @@ You can also choose to use `colorless_main.py` in case your command line doesn't
 
 ### Getting the snap file
 
-I've also made snap installations for both the colorless and colored distributions! The colored one is up in the snap store: https://snapcraft.io/genshin-resource-calc
+I've also made snap installations for both the colorless and colored distributions! The colored one is up in the snap store!
+
+
+<iframe src="https://snapcraft.io/genshin-resource-calc/embedded?button=black" frameborder="0" width="100%" height="300px" style="border: 1px solid #CCC; border-radius: 2px;"></iframe>
+
+
 
 If you wish to set up the colored distribution on your own,
 
