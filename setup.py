@@ -10,10 +10,10 @@ setup(
     packages = ['src'],
     package_data={'src': ['description.txt']
                  },
-    # install_requires=['future'],
+    install_requires=['colorama'],
     entry_points = {
         'console_scripts': [
-            'genshin-resource-calc=src.colorless_main:main']
+            'genshin-resource-calc=src.main:main']
             },
     classifiers = ['Operating System :: OS Independent',
             'Programming Language :: Python :: 2.7',
