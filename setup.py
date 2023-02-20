@@ -10,11 +10,25 @@ setup(
     packages = ['src'],
     package_data={'src': ['description.txt']
                  },
+    
+    # Comment this line if you're snapping
+    # a colorless installation.
+    
     install_requires=['colorama'],
+    
+    # Uncomment this line if you're snapping a colorless 
+    # installation:
+    
+    # entry_points = {
+    #     'console_scripts': [
+    #         'genshin-resource-calc=src.colorless_main:main']
+    #         },
+    
     entry_points = {
         'console_scripts': [
             'genshin-resource-calc=src.main:main']
             },
+    
     classifiers = ['Operating System :: OS Independent',
             'Programming Language :: Python :: 2.7',
             'Programming Language :: Python :: 3.6',
