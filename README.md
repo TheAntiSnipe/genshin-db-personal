@@ -1,5 +1,7 @@
 # genshin-db-personal
 
+Snap store link: https://snapcraft.io/genshin-resource-calc
+
 Just a personal database for Genshin Impact.
 Currently, we have the following features:
 
@@ -21,9 +23,7 @@ You can also choose to use `colorless_main.py` in case your command line doesn't
 
 ### Getting the snap file
 
-I've also made snap installations for both the colorless and colored distributions! The colored one is up in the snap store: https://snapcraft.io/genshin-resource-calc
-
-If you wish to set up the colored distribution on your own,
+If you wish to set up the colored distribution snap on your own,
 
 1. Make sure snapcraft is installed.
 2. Navigate to the project directory, and type in `snapcraft --use-lxd`
