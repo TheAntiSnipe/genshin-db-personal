@@ -3,12 +3,6 @@ import json
 
 init()
 
-class InputValidator:
-    def take_integer(self,text,color,fallback):
-        value = input(color+text)
-        while(not value.isdigit()):
-            value = input(color+fallback)
-        return value
 class TalentCostCalculator:
     def __init__(self):
         # talent_material_cost_json = open("talent_material_cost.json", "r")
@@ -36,14 +30,17 @@ class TalentCostCalculator:
         # * Used in determine_total_costs_and_display after all iterations of
         # * aggregate_cumulative_cost finish.
 
-    # * Three methods:
-    # *    1. aggregate_cumulative_cost
+    # * Four methods:
+    # *    1. validate_level_input
+    #         Validates input level against a whitelist
+    #         and resorts to a fallback if this isn't followed.
+    # *    2. aggregate_cumulative_cost
     #        Handles dataframe aggregation and summation with
     #        cumulative_material_dict.
-    # *    2. determine_total_costs_and_display
+    # *    3. determine_total_costs_and_display
     #        Handles method calls to aggregate_cumulative_cost and displays
     #        output UI.
-    # *    3. run_talent_material_calculator
+    # *    4. run_talent_material_calculator
     #        Handles UI display and sends initial and final talent values to
     #        determine_total_costs_and_display.
 
@@ -123,29 +120,36 @@ class BasicCalculationFunctions:
     #  any of the csv files.
 
     # * Three methods:
-    # *     1. exp_input
+    # *     1. take_integer
+    #          Persistently takes input until user enters an int.
+    # *     2. exp_input
     #          Common input handler for 2 and 3.
-    # *     2. mora_for_exp_calculator
+    # *     3. mora_for_exp_calculator
     #         Handles the second option, gives the number of mora needed
     #         for a given number of EXP books.
-    # *     3. exp_book_aggregator
+    # *     4. exp_book_aggregator
     #         Handles the conversion of various EXP book types to a standardized
     #         "hero's wit equivalent" format.
+    def take_integer(self,text,color,fallback):
+        value = input(color+text)
+        while(not value.isdigit()):
+            value = input(color+fallback)
+        return value
+    
     def exp_input(self):
         print(Fore.GREEN + "\nI have the following EXP book quantities: ")
-        validate = InputValidator()
         text = "Uncommon books: "
         fallback = "Please enter an integer for uncommon books: "
         color = Fore.GREEN
-        uncommon_exp_books = int(validate.take_integer(text,color,fallback))
+        uncommon_exp_books = int(self.take_integer(text,color,fallback))
         text = "Rare books: "
         fallback = "Please enter an integer for rare books: "
         color = Fore.CYAN
-        rare_exp_books = int(validate.take_integer(text,color,fallback))
+        rare_exp_books = int(self.take_integer(text,color,fallback))
         text = "Epic books: "
         fallback = "Please enter an integer for epic books: "
         color = Fore.MAGENTA
-        epic_exp_books = int(validate.take_integer(text,color,fallback))
+        epic_exp_books = int(self.take_integer(text,color,fallback))
         return uncommon_exp_books,rare_exp_books,epic_exp_books
 
     def mora_for_exp_calculator(self):
